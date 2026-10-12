@@ -55,6 +55,24 @@ These are server-only. Do not prefix them with `NUXT_PUBLIC_`.
 
 On push, GitHub Actions runs `pnpm lint` and `pnpm typecheck`.
 
+## Docker
+
+The image is a production Nitro server. Set `NUXT_API_BASE_URL` and `NUXT_API_KEY` at **run** time (they are not baked in at build).
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+The app listens on `http://localhost:3000`. `GET /api/health` is used as the container health check.
+
+Without Compose:
+
+```bash
+docker build -t notmemtime .
+docker run --rm -p 3000:3000 --env-file .env notmemtime
+```
+
 ## How the API is wired
 
 The UI calls same-origin `/api/*` routes via `app/services/api.ts`.
