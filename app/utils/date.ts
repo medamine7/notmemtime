@@ -9,3 +9,11 @@ export function formatDate(dateString: string): string {
 
   return date.toLocaleDateString('en', options)
 }
+
+export function formatTime(dateString: string): string {
+  return new Date(dateString).toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  })
+}
