@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   },
 
   routeRules: {
-    '/': { prerender: true, redirect: '/work-management' }
+    '/': { redirect: '/work-management' }
   },
 
   compatibilityDate: '2026-06-30',
