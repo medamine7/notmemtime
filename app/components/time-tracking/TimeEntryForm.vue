@@ -74,6 +74,7 @@ const editingEntry = ref<TimeEntry | null>(null)
 
 const isEditMode = computed(() => Boolean(editingEntry.value))
 const isSubmitting = computed(() => Boolean(props.loading))
+const isLoading = ref(!clients.value.length)
 const isBusy = computed(
   () => isSubmitting.value || clientsPending.value || projectsPending.value || tasksPending.value
 )
@@ -253,8 +254,9 @@ function onSubmit(event: FormSubmitEvent<FormOutput>) {
 
 async function openForm(entry?: TimeEntry | null) {
   editingEntry.value = entry ?? null
-  await populateForm(entry)
   open.value = true
+  await populateForm(entry)
+  isLoading.value = false
 }
 
 function closeForm() {
@@ -273,7 +275,9 @@ defineExpose({ open: openForm, close: closeForm })
     "
   >
     <template #body>
-      <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+      <TimeTrackingFormSkeleton v-if="isLoading" class="space-y-4" />
+
+      <UForm v-else :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
         <UFormField label="Client" name="client">
           <USelect
             :model-value="selectedClientId"
