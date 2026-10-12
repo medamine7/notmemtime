@@ -2,6 +2,10 @@
 definePageMeta({
   title: 'Work management'
 })
+
+useSeoMeta({
+  title: 'Work management'
+})
 </script>
 
 <template>

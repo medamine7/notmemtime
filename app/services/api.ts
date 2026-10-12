@@ -14,18 +14,18 @@ type RequestOptions = {
 
 export const api = {
   clients: {
-    getAll: ({ params, signal }: RequestOptions) =>
+    getAll: ({ params, signal }: RequestOptions = {}) =>
       $fetch<Client[]>('/api/clients', {
         query: params,
         signal
       }),
 
-    getById: (id: number, { signal }: RequestOptions) =>
+    getById: (id: number, { signal }: RequestOptions = {}) =>
       $fetch<Client>(`/api/clients/${id}`, {
         signal
       }),
 
-    getProjects: (id: number, { signal, params }: RequestOptions) =>
+    getProjects: (id: number, { signal, params }: RequestOptions = {}) =>
       $fetch<Project[]>(`/api/clients/${id}/projects`, {
         query: params,
         signal
@@ -33,12 +33,12 @@ export const api = {
   },
 
   projects: {
-    getById: (id: number, { signal }: RequestOptions) =>
+    getById: (id: number, { signal }: RequestOptions = {}) =>
       $fetch<Project>(`/api/projects/${id}`, {
         signal
       }),
 
-    getTasks: (id: number, { params, signal }: RequestOptions) =>
+    getTasks: (id: number, { params, signal }: RequestOptions = {}) =>
       $fetch<Task[]>(`/api/projects/${id}/tasks`, {
         query: params,
         signal
@@ -46,39 +46,39 @@ export const api = {
   },
 
   tasks: {
-    getById: (id: number, { signal }: RequestOptions) =>
+    getById: (id: number, { signal }: RequestOptions = {}) =>
       $fetch<Task>(`/api/tasks/${id}`, {
         signal
       })
   },
 
   timeEntries: {
-    getAll: ({ params, signal }: RequestOptions) =>
+    getAll: ({ params, signal }: RequestOptions = {}) =>
       $fetch<TimeEntry[]>('/api/time-entries', {
         query: params,
         signal
       }),
 
-    getById: (id: number, { signal }: RequestOptions) =>
+    getById: (id: number, { signal }: RequestOptions = {}) =>
       $fetch<TimeEntry>(`/api/time-entries/${id}`, {
         signal
       }),
 
-    create: (body: TimeEntryInput, { signal }: RequestOptions) =>
+    create: (body: TimeEntryInput, { signal }: RequestOptions = {}) =>
       $fetch<TimeEntry>('/api/time-entries', {
         method: 'POST',
         body,
         signal
       }),
 
-    update: (id: number, body: TimeEntryInput, { signal }: RequestOptions) =>
+    update: (id: number, body: TimeEntryInput, { signal }: RequestOptions = {}) =>
       $fetch<TimeEntry>(`/api/time-entries/${id}`, {
         method: 'PUT',
         body,
         signal
       }),
 
-    delete: (id: number, { signal }: RequestOptions) =>
+    delete: (id: number, { signal }: RequestOptions = {}) =>
       $fetch<{ message: string }>(`/api/time-entries/${id}`, {
         method: 'DELETE',
         signal

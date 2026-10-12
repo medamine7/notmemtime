@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 
+useHead({
+  titleTemplate: (titleChunk) => {
+    return titleChunk ? `${titleChunk} - NotMemTime` : 'NotMemTime'
+  }
+})
+
 const open = ref(true)
 
 const items: NavigationMenuItem[] = [

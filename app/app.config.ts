@@ -16,17 +16,17 @@ export default defineAppConfig({
     },
     input: {
       defaultVariants: {
-        variant: 'soft'
+        variant: 'outline'
       }
     },
     select: {
       defaultVariants: {
-        variant: 'soft'
+        variant: 'outline'
       }
     },
     textarea: {
       defaultVariants: {
-        variant: 'soft'
+        variant: 'outline'
       }
     },
     selectMenu: {
