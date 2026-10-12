@@ -1,64 +1,84 @@
-# Nuxt Starter Template
+<p align="center">
+  <img src="public/logo.png" alt="NotMemTime" width="160" />
+</p>
 
-[![Nuxt UI](https://img.shields.io/badge/Made%20with-Nuxt%20UI-00DC82?logo=nuxt&labelColor=020420)](https://ui.nuxt.com)
+<h1 align="center">
+  <em><span style="color: #f87171">NOT</span>MEM<span style="color: #0ea5e9">TIME</span></em>
+</h1>
 
-Use this template to get started with [Nuxt UI](https://ui.nuxt.com) quickly.
+A Nuxt 4 frontend for managing clients, projects, and tasks, and for logging time against that work.
 
-- [Live demo](https://starter-template.nuxt.dev/)
-- [Documentation](https://ui.nuxt.com/docs/getting-started/installation/nuxt)
+The app talks to an external REST API through a server-side proxy. The browser never sees the API key.
 
-<a href="https://starter-template.nuxt.dev/" target="_blank">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-dark.png">
-    <source media="(prefers-color-scheme: light)" srcset="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png">
-    <img alt="Nuxt Starter Template" src="https://ui.nuxt.com/assets/templates/nuxt/starter-light.png" width="830" height="466">
-  </picture>
-</a>
+## Features
 
-> The starter template for Vue is on https://github.com/nuxt-ui-templates/starter-vue.
+- **Work management** — paginated tree of clients, with nested projects and tasks
+- **Time tracking** — list, create, and edit time entries (task, comment, start/end)
+- **Status badges** — `active`, `pending`, `in-progress`, `completed`
+- Sidebar navigation; `/` redirects to work management
 
-## Quick Start
+## Stack
 
-```bash [Terminal]
-npm create nuxt@latest -- -t ui
-```
-
-## Deploy your own
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-name=starter&repository-url=https%3A%2F%2Fgithub.com%2Fnuxt-ui-templates%2Fstarter&demo-image=https%3A%2F%2Fui.nuxt.com%2Fassets%2Ftemplates%2Fnuxt%2Fstarter-dark.png&demo-url=https%3A%2F%2Fstarter-template.nuxt.dev%2F&demo-title=Nuxt%20Starter%20Template&demo-description=A%20minimal%20template%20to%20get%20started%20with%20Nuxt%20UI.)
+- [Nuxt 4](https://nuxt.com) and [Nuxt UI](https://ui.nuxt.com)
+- [Tailwind CSS 4](https://tailwindcss.com)
+- [Zod](https://zod.dev) for form validation
+- [pnpm](https://pnpm.io) (`packageManager`: `pnpm@12.9.1`)
 
 ## Setup
 
-Make sure to install the dependencies:
+Node 24 is what CI uses. Copy env vars, then install:
 
 ```bash
+cp .env.example .env
 pnpm install
 ```
 
-## Development Server
+### Environment
 
-Start the development server on `http://localhost:3000`:
+| Variable            | Description                                                    |
+| ------------------- | -------------------------------------------------------------- |
+| `NUXT_API_BASE_URL` | Backend API origin (Nitro `runtimeConfig.apiBaseUrl`)          |
+| `NUXT_API_KEY`      | Bearer token sent by the server proxy (`runtimeConfig.apiKey`) |
 
-```bash
-pnpm dev
+These are server-only. Do not prefix them with `NUXT_PUBLIC_`.
+
+## Scripts
+
+| Command                           | What it does                          |
+| --------------------------------- | ------------------------------------- |
+| `pnpm dev`                        | Dev server at `http://localhost:3000` |
+| `pnpm build`                      | Production build                      |
+| `pnpm preview`                    | Preview the production build          |
+| `pnpm lint` / `pnpm lint:fix`     | ESLint                                |
+| `pnpm format` / `pnpm format:fix` | Prettier                              |
+| `pnpm typecheck`                  | `nuxt typecheck`                      |
+
+On push, GitHub Actions runs `pnpm lint` and `pnpm typecheck`.
+
+## How the API is wired
+
+The UI calls same-origin `/api/*` routes via `app/services/api.ts`.
+
+Nitro handlers in `server/api/` forward those requests to `NUXT_API_BASE_URL` with `Authorization: Bearer <NUXT_API_KEY>`. `GET /api/health` is a local liveness check and is not proxied.
+
+| Client helper                       | Upstream                                         |
+| ----------------------------------- | ------------------------------------------------ |
+| `api.clients.getAll` / `getById`    | `/clients`, `/clients/:id`                       |
+| `api.clients.getProjects`           | `/clients/:id/projects`                          |
+| `api.projects.getById` / `getTasks` | `/projects/:id`, `/projects/:id/tasks`           |
+| `api.tasks.getById`                 | `/tasks/:id`                                     |
+| `api.timeEntries.*`                 | `/time-entries` (`GET`, `POST`, `PUT`, `DELETE`) |
+
+Shared TypeScript types live in `shared/types`.
+
+## Project layout
+
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-pnpm build
+app/
+  pages/                 work-management, time-tracking
+  components/            tree, time-entry form, shared UI
+  composables/           data fetching and mutations
+  services/api.ts        browser → /api proxy
+server/api/              proxy + health
+shared/types/            Client, Project, Task, TimeEntry
 ```
-
-Locally preview production build:
-
-```bash
-pnpm preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-
-## Renovate integration
-
-Install [Renovate GitHub app](https://github.com/apps/renovate/installations/select_target) on your repository and you are good to go.
