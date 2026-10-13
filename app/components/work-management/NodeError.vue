@@ -18,22 +18,8 @@ defineEmits(['retry'])
 </script>
 
 <template>
-  <div role="alert" class="flex items-center gap-3 bg-error-100 px-4 py-3">
-    <svg
-      class="h-5 w-5 shrink-0 text-error"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="9" />
-      <path d="M12 8v4" />
-      <path d="M12 16h.01" />
-    </svg>
-
+  <div role="alert" class="flex items-center gap-4 bg-error-100 px-4 py-3">
+    <UIcon name="i-lucide-circle-alert" class="text-error size-5" />
     <div class="min-w-0 flex-1">
       <h6 class="text-base font-medium text-error">
         {{ title }}
